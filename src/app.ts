@@ -15,7 +15,31 @@ interface Book {
   author: string;
   available: boolean;
   category: Category;
+  pages?: number;
+  markDamaged?: DamageLogger,
 }
+
+interface DamageLogger {
+  (reason: string): void;
+}
+
+interface Person {
+  name: string;
+  email: string;
+}
+
+interface Author extends Person {
+  numBooksPublished: number;
+}
+
+interface Librarian extends Person {
+  department: string;
+  assistCustomer: (custName: string) => void;
+}
+
+type BookProperties = keyof Book;
+type PersonBook = Person | Book;
+type BookOrUndefined = Book | undefined;
 
 function getAllBooks(): readonly Book[] {
   const books: readonly Book[] = <const>[
@@ -27,6 +51,16 @@ function getAllBooks(): readonly Book[] {
 
   return books;  
 }
+
+const myBook: Book = {
+  id: 5,
+  title: 'Colors, Backgrounds, and Gradients',
+  author: 'Eric A. Meyer',
+  available: true,
+  category: Category.CSS,
+  pages: 200,
+  markDamaged: (reason: string) => console.log(`Damaged: ${reason}`),
+} ;
 
 function logFirstAvailable(books: readonly object[] = getAllBooks()): void {
   const num: number = books.length;
@@ -78,7 +112,7 @@ function calcTotalPages(): bigint {
   return pages;
 }
 
-function getBookById(id: number): Book | undefined {
+function getBookById(id: number): BookOrUndefined {
   const books = getAllBooks();
   return books.find(book => book['id'] === id);
 }
@@ -148,7 +182,71 @@ function bookTitleTransform(title: any): string {
 }
 
 function printBook(book: Book): void {
-  console.log(`${book.author} by ${book.author}`);
+  console.log(`${book.title} by ${book.author}`);
+}
+
+function getBookProp(book: Book, prop: BookProperties): any {
+  if(typeof book[prop] === 'function') {
+    return book[prop]['name'];
+    // return (book[prop] as Function).name;
+  }
+
+  return book[prop];
+}
+
+abstract class ReferenceItem {
+  // title: string;
+  // year: number;
+  private _publisher: string;
+
+  static department: string = 'Research Dept';
+
+  get publisher(): string {
+    return this._publisher.toLocaleUpperCase();
+  }
+
+  set publisher(publisher: string) {
+    this._publisher = publisher;
+  }
+
+  constructor(public title: string, protected year: number) {}
+
+  printItem(): void {
+    console.log(`${this.title} was published in ${this.year}`);
+    console.log(`Department: ${ReferenceItem.department}`);
+  }
+
+  abstract printCitation(): void;
+}
+
+class Encyclopedia  extends ReferenceItem {
+  constructor(
+    newTitle: string,
+    newYear: number,
+    public edition: number) {
+    super(newTitle, newYear);
+  }
+
+  printItem(): void {
+    super.printItem();
+    console.log(`Edition: ${this.edition} (${this.year})`);
+  }
+
+  printCitation(): void {
+    console.log(`${this.title} - ${this.year}`);
+  }
+}
+
+class UniversityLibrarian implements Librarian {
+  constructor(
+    public name: string,
+    public email: string,
+    public department: string,
+  ) {}
+
+  assistCustomer(custName: string): void {
+    console.log(`${this.name} assist ${custName}`);
+  }
 }
 
 // logFirstAvailable(getAllBooks());
@@ -186,5 +284,59 @@ function printBook(book: Book): void {
 // console.log(myBooks);
 
 // console.log(getTitles(false));
-console.log(bookTitleTransform('CSS Secrets'));
-console.log(bookTitleTransform(1));
+// console.log(bookTitleTransform('CSS Secrets'));
+// console.log(bookTitleTransform(1));
+
+// printBook(myBook);
+// myBook.markDamaged('coffee');
+
+// const logDamage: DamageLogger = (reason: string) => console.log(`Damage: ${reason}`);
+// logDamage('missing back cover');
+
+// const favouriteAuthor: Author = {
+//   name: 'Ann',
+//   email: 'ann@gmail.com',
+//   numBooksPublished: 10,
+// }
+
+// const favouriteLibrarian: Librarian = {
+//   name: 'Boris',
+//   email: 'boris@gmail.com',
+//   department: 'Classical Literature',
+//   assistCustomer: (name: string) => console.log(`Assist: ${name}`), 
+// }
+
+// const offer: any = {
+//   book: {
+//     title: 'Essential TypeScript'
+//   }
+// };
+
+// console.log(offer.paper?.magazine);
+
+// console.log(getBookProp(getAllBooks()[0], 'title'));
+// console.log(getBookProp(myBook, 'markDamaged'));
+
+// const ref = new ReferenceItem('TypeScript', 2020);
+// ref.printItem();
+// ref.publisher = 'ramdom publisher';
+// console.log(ref.publisher)
+
+// const refBook = new Encyclopedia('Encyclopedia', 2020, 3);
+// refBook.printItem();
+// refBook.printCitation();
+
+// const favouriteLibrarian: Librarian = new UniversityLibrarian('Boris', 'boris@gmail.com', 'Classical Literature');
+// favouriteLibrarian.assistCustomer('Ann');
+
+const personBoook: PersonBook = {
+  name: 'Ann',
+  email: 'ann@gmail.com',
+  id: 1,
+  title: 'Book',
+  author: 'author',
+  available: true,
+  category: Category.JavaScript,
+}
+
+console.log(personBoook);
