@@ -1,8 +1,9 @@
-import { Book, Logger } from "./interfaces";
+import { Book, Logger, Magazine } from "./interfaces";
 import { Category } from "./emuns";
-import { ReferenceItem, RefBook } from "./classes";
-import { PersonBook } from "./types";
-import { getAllBooks, purge } from "./functions";
+import { ReferenceItem, RefBook, Shelf, UniversityLibrarian } from "./classes";
+import { PersonBook, BookRequiredFields, UpdatedBook, СreateCustomerFunctionType } from "./types";
+import { getAllBooks, purge, createCustomer } from "./functions";
+import Encyclopedia from "./classes/encyclopedia";
 
 showHello('greeting', 'TypeScript');
 
@@ -65,8 +66,8 @@ const myBook: Book = {
 // myBook.markDamaged('coffee');
 
 // Task 04.02
-const logDamage: Logger = (reason: string) => console.log(`Damage: ${reason}`);
-logDamage('missing back cover');
+// const logDamage: Logger = (reason: string) => console.log(`Damage: ${reason}`);
+// logDamage('missing back cover');
 
 // const favouriteAuthor: Author = {
 //   name: 'Ann',
@@ -98,9 +99,9 @@ logDamage('missing back cover');
 // console.log(ref.publisher)
 
 // Task 05.02
-const refBook = new RefBook('Encyclopedia', 2020, 3);
-refBook.printItem();
-refBook.printCitation();
+// const refBook = new RefBook('Encyclopedia', 2020, 3);
+// refBook.printItem();
+// refBook.printCitation();
 
 // const favouriteLibrarian: Librarian = new UniversityLibrarian('Boris', 'boris@gmail.com', 'Classical Literature');
 // favouriteLibrarian.assistCustomer('Ann');
@@ -115,15 +116,15 @@ const personBoook: PersonBook = {
   category: Category.JavaScript,
 }
 
-console.log(personBoook);
+// console.log(personBoook);
 
 // Task 06.05
-import('./classes').then(module => {
-  const reader = new module.Reader();
-  reader.name = 'Anna';
-  reader.take(getAllBooks()[1]);
-  console.log(reader);
-});
+// import('./classes').then(module => {
+//   const reader = new module.Reader();
+//   reader.name = 'Anna';
+//   reader.take(getAllBooks()[1]);
+//   console.log(reader);
+// });
 
 // Task 07.01
 const inventory: Array<Book> = [
@@ -141,3 +142,50 @@ const inventory: Array<Book> = [
 // console.log(res);
 
 // Task 07.02
+
+const magazines: Array<Magazine> =[     
+  { title: 'Programming Language Monthly', publisher: 'Code Mags' },     
+  { title: 'Literary Fiction Quarterly', publisher: 'College Press' },     
+  { title: 'Five Points', publisher: 'GSU' } 
+];
+
+// const magazineShelf = new Shelf<Magazine>();
+// magazines.forEach(item => magazineShelf.add(item));
+
+// Task 07.03
+// magazineShelf.printTitle();
+
+// Task 07.04
+const book: BookRequiredFields = {
+  id: 1,
+  author: 'Ann',
+  available: true,
+  category: Category.Angular,
+  title: 'some title',
+  pages: 200,
+  markDamaged: null,
+};
+
+const updatedBook: UpdatedBook = {
+  id: 2,
+  title: 'new title',
+};
+
+const customer: Parameters<СreateCustomerFunctionType> = ['Anna', 25];
+// createCustomer(...customer);
+
+// Task 08.01
+// const obj = new UniversityLibrarian();
+// console.log(obj);
+
+// Task 08.02
+// obj.name = 'Ann';
+// obj['printLibrarian']();
+
+// Task 08.03
+// obj.assistFaculty = null;
+// obj.teachCommunity = null;
+
+// Task 08.04
+const e = new Encyclopedia('new title', 2020, 3);
+e.printItem();
