@@ -2,7 +2,7 @@ import { Book, Logger, Magazine } from "./interfaces";
 import { Category } from "./emuns";
 import { ReferenceItem, RefBook, Shelf, UniversityLibrarian } from "./classes";
 import { PersonBook, BookRequiredFields, UpdatedBook, СreateCustomerFunctionType } from "./types";
-import { getAllBooks, purge, createCustomer } from "./functions";
+import { getAllBooks, purge, createCustomer, getBooksByCategory, logCategorySearch, getBooksByCategoryPromise, logSearchResults } from "./functions";
 import Encyclopedia from "./classes/encyclopedia";
 
 showHello('greeting', 'TypeScript');
@@ -187,5 +187,55 @@ const customer: Parameters<СreateCustomerFunctionType> = ['Anna', 25];
 // obj.teachCommunity = null;
 
 // Task 08.04
-const e = new Encyclopedia('new title', 2020, 3);
-e.printItem();
+// const e = new Encyclopedia('new title', 2020, 3);
+// e.printItem();
+
+//  Task 08.05
+// const librarian = new UniversityLibrarian();
+// librarian.name = 'Boris';
+// librarian.assistCustomer('Ann');
+
+//  Task 08.06
+// const librarian = new UniversityLibrarian();
+// librarian.name = 'Anna';
+// console.log(librarian.name)
+
+//  Task 08.07
+// const e = new Encyclopedia('Title', 2020, 3);
+// e.copies = 5;
+// console.log(e.copies);
+
+// Task 09.01
+// console.log('Start');
+// getBooksByCategory(Category.JavaScript, logCategorySearch);
+// getBooksByCategory(Category.Software, logCategorySearch);
+// console.log('Finish');
+
+// Task 09.02
+// console.log('Start');
+// getBooksByCategoryPromise(Category.JavaScript)
+//   .then(titles => {
+//     titles.forEach(title => console.log(title));
+//     return titles.length;
+//   })
+//   .then(numOfBooks => console.log(numOfBooks))
+//   .catch(console.log);
+// getBooksByCategoryPromise(Category.Software)
+//   .then(titles => {
+//     titles.forEach(title => console.log(title));
+//     return titles.length;
+//   })
+//   .then(numOfBooks => console.log(numOfBooks))
+//   .catch(console.log);
+
+// console.log('Finish');
+
+// Task 09.03
+console.log('Start');
+logSearchResults(Category.JavaScript)
+  .then(console.log)
+  .catch(console.log);
+logSearchResults(Category.Software)
+  .then(console.log)
+  .catch(console.log);
+console.log('Finish');

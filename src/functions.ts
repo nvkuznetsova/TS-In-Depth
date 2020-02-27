@@ -1,4 +1,4 @@
-import { Book } from "./interfaces";
+import { Book, LibMgrCallback } from "./interfaces";
 import { Category } from "./emuns";
 import { BookOrUndefined, BookProperties } from "./types";
 
@@ -147,4 +147,45 @@ export function getBookProp(book: Book, prop: BookProperties): any {
 
 export function purge<T>(inventory: Array<T>): Array<T> {
   return inventory.slice(2);
+}
+
+export function getBooksByCategory(category: Category, callback: LibMgrCallback) {
+  setTimeout(() => {
+    try {
+      const titles: string[] = getBookTitlesByCategory(category);
+      if (titles.length) {
+        callback(null, titles);
+      } else {
+        throw new Error('No books found');
+      }
+    } catch(err) {
+      callback(err, null);
+    }
+  }, 2000)
+}
+
+export const logCategorySearch: LibMgrCallback = (err: Error, titles: string[]): void => {
+  if (err) {
+    console.log(err.message);
+  } else {
+    titles.forEach(title => console.log(title));
+  }
+}
+
+export function getBooksByCategoryPromise(category: Category): Promise<string[]> {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+        const titles: string[] = getBookTitlesByCategory(category);
+        if (titles.length) {
+          resolve(titles);
+        } else {
+          reject('No books found');
+        }
+    }, 2000);
+  });
+}
+
+export async function logSearchResults(category: Category) {
+  const titles: string[] = await getBooksByCategoryPromise(category);
+  console.log(titles.length);
 }
