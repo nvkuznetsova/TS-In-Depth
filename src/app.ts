@@ -1,8 +1,28 @@
-import { Book, Logger, Magazine } from "./interfaces";
+import { Book, Logger, Magazine, Author, Librarian } from "./interfaces";
 import { Category } from "./emuns";
 import { ReferenceItem, RefBook, Shelf, UniversityLibrarian } from "./classes";
 import { PersonBook, BookRequiredFields, UpdatedBook, СreateCustomerFunctionType } from "./types";
-import { getAllBooks, purge, createCustomer, getBooksByCategory, logCategorySearch, getBooksByCategoryPromise, logSearchResults } from "./functions";
+import { 
+  getAllBooks,
+  purge,
+  createCustomer,
+  getBooksByCategory,
+  logCategorySearch,
+  getBooksByCategoryPromise,
+  logSearchResults,
+  logBookTitles,
+  logFirstAvailable,
+  getBookTitlesByCategory,
+  calcTotalPages,
+  getBookAuthorByIndex,
+  getBookById,
+  createCustomerId,
+  сheckoutBooks,
+  getTitles,
+  bookTitleTransform,
+  printBook,
+  getBookProp,
+} from "./functions";
 import Encyclopedia from "./classes/encyclopedia";
 
 showHello('greeting', 'TypeScript');
@@ -24,88 +44,96 @@ const myBook: Book = {
   markDamaged: (reason: string) => console.log(`Damaged: ${reason}`),
 } ;
 
+// Task 02.01
 // logFirstAvailable(getAllBooks());
 // logBookTitles(getBookTitlesByCategory(Category.JavaScript));
 // console.log(getBookAuthorByIndex(2));
-// console.log(calcTotalPages())
+// console.log(calcTotalPages());
 
-// Task 3
+// Task 03.01
 // const titles = getBookTitlesByCategory(Category.JavaScript);
 // titles.forEach((title: string) => console.log(title));
+// console.log(getBookById(2));
 
-// console.log(getBookById(10));
-
+// Task 03.02
 // let myId = createCustomerId('Ann', 10);
 // console.log(myId);
-
 // let idGenerator: (name: string, id: number) => string;
 // idGenerator = createCustomerId;
 // myId = idGenerator('Boris', 20);
 // console.log(myId);
-
 // idGenerator = (name: string, id: number) => `${id}${name}`;
-// console.log(idGenerator('Name', 77))
+// console.log(idGenerator('Name', 77));
 
+// Task 03.03
 // createCustomer('Ann');
 // createCustomer('Ann', 20);
 // createCustomer('Ann', 20, 'Spb');
-
 // const books = getBookTitlesByCategory();
 // console.log(books);
-
 // logFirstAvailable();
-
 // const myBooks = сheckoutBooks('Ann', 1, 2, 4);
 // console.log(myBooks);
 
+// Task 03.04
 // console.log(getTitles(false));
+
+// Task 03.05
 // console.log(bookTitleTransform('CSS Secrets'));
 // console.log(bookTitleTransform(1));
 
+// Task 04.01
 // printBook(myBook);
-// myBook.markDamaged('coffee');
+// myBook.markDamaged('missing back cover');
 
 // Task 04.02
 // const logDamage: Logger = (reason: string) => console.log(`Damage: ${reason}`);
 // logDamage('missing back cover');
 
-// const favouriteAuthor: Author = {
-//   name: 'Ann',
-//   email: 'ann@gmail.com',
-//   numBooksPublished: 10,
-// }
+// Task 04.03
+const favouriteAuthor: Author = {
+  name: 'Ann',
+  email: 'ann@gmail.com',
+  numBooksPublished: 10,
+}
 
-// const favouriteLibrarian: Librarian = {
-//   name: 'Boris',
-//   email: 'boris@gmail.com',
-//   department: 'Classical Literature',
-//   assistCustomer: (name: string) => console.log(`Assist: ${name}`), 
-// }
+const favouriteLibrarian: Librarian = {
+  name: 'Boris',
+  email: 'boris@gmail.com',
+  department: 'Classical Literature',
+  assistCustomer: (name: string) => console.log(`Assist: ${name}`), 
+}
 
-// const offer: any = {
-//   book: {
-//     title: 'Essential TypeScript'
-//   }
-// };
-
+// Task 04.04
+const offer: any = {
+  book: {
+    title: 'Essential TypeScript'
+  }
+};
 // console.log(offer.paper?.magazine);
 
+// Task 04.05
 // console.log(getBookProp(getAllBooks()[0], 'title'));
 // console.log(getBookProp(myBook, 'markDamaged'));
 
+// Task 05.01
 // const ref = new ReferenceItem('TypeScript', 2020);
 // ref.printItem();
 // ref.publisher = 'ramdom publisher';
-// console.log(ref.publisher)
+// console.log(ref.publisher);
 
-// Task 05.02
+// Task 05.02 
+// Task 05.03
 // const refBook = new RefBook('Encyclopedia', 2020, 3);
 // refBook.printItem();
 // refBook.printCitation();
 
-// const favouriteLibrarian: Librarian = new UniversityLibrarian('Boris', 'boris@gmail.com', 'Classical Literature');
-// favouriteLibrarian.assistCustomer('Ann');
+// Task 05.04
+// const favouriteLibrarian1: Librarian = new UniversityLibrarian();
+// favouriteLibrarian1.name = 'Boris';
+// favouriteLibrarian1.assistCustomer('Ann');
 
+// Task 05.05
 const personBoook: PersonBook = {
   name: 'Ann',
   email: 'ann@gmail.com',
@@ -115,7 +143,6 @@ const personBoook: PersonBook = {
   available: true,
   category: Category.JavaScript,
 }
-
 // console.log(personBoook);
 
 // Task 06.05
@@ -135,13 +162,16 @@ const inventory: Array<Book> = [
 ];
 
 // const result = purge(inventory);
-// const result = purge<Book>(inventory);
-// console.log(result);
+// const result1 = purge<Book>(inventory);
+// console.log(result1);
 
 // const res = purge([1, 2, 3, 4]) ;
 // console.log(res);
 
 // Task 07.02
+// const bookShelf  = new Shelf<Book>();
+// getAllBooks().forEach(book => bookShelf.add(book));
+// console.log(bookShelf.getFirst().title);
 
 const magazines: Array<Magazine> =[     
   { title: 'Programming Language Monthly', publisher: 'Code Mags' },     
@@ -151,9 +181,11 @@ const magazines: Array<Magazine> =[
 
 // const magazineShelf = new Shelf<Magazine>();
 // magazines.forEach(item => magazineShelf.add(item));
+// console.log(magazineShelf.getFirst().title);
 
 // Task 07.03
 // magazineShelf.printTitle();
+// console.log(magazineShelf.find('Five Points'));
 
 // Task 07.04
 const book: BookRequiredFields = {
